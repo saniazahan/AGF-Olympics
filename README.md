@@ -2,7 +2,7 @@
 
 ## Learning Sparse Temporal Video Mapping for Action Quality Assessment in Floor Gymnastics
 
-### Sample from the dataset 
+### Video sample from the dataset 
 Athlete: Aly Raisman
 Total Score - 15.433, Gender - F, Event - All Around, Olympic	2016
 
