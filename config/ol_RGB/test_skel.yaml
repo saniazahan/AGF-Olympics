@@ -1,0 +1,57 @@
+# feeder
+feeder: feeders.feeder.Feeder
+
+#data_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/Skeleton_data/test_joint_1st_index_interpolated.npy
+#label_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/Skeleton_data/test_label_1st_index.pkl
+test_feeder_args:
+  data_path: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Data/Olympic_Openpose/Olympic_Openpose_V1/test_joint_v1.npy
+  label_path: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Data/Olympic_Openpose/Olympic_Openpose_V1/test_label_v1.pkl
+  video_path: None #/media/22905553/F020DDF820DDC5AE/Olympic_v1/video_frames/
+  seq_len: -1
+  video_feature: False
+  video_only: False
+  label_smooth: False
+  normalization: True
+  debug: False
+
+
+# model
+model1: model.model.Model
+model_args:
+  num_class: 2
+  num_point: 25 
+  max_frame: 3500
+  graph_args:
+    'layout': 'olympic'
+    'strategy': 'spatial'
+    'max_hop': 3
+  act_type: 'relu'
+  bias: True
+  edge: True
+  block_size: 41
+  class_loss: False
+  xpm_window_size: 25
+  xpm_stride: 16
+  xpm_num_scales: 1
+#  drop_out: 0.2
+
+model2: model.seq_model.MLP
+seq_model_args:
+  input_size: 5600
+  inchannel: 192 #12
+  channel_kernel: 16
+  seq_kernel: 59
+  drop_out: 0.2
+  stream: 1s
+
+
+# test
+phase: test
+device: [0]
+test_batch_size: 16
+weights1: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Olympic_code/trial20/weights/weights-4-176.pt
+
+weights2: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Olympic_code/trial20/weights/seq-weights-4-176.pt
+
+work_dir: ./eval/ntu/xsub/joint/
+save_score: True

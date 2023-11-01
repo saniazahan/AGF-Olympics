@@ -1,0 +1,102 @@
+
+work_dir: ./work_dir/ntu/xsub/trial1
+
+# feeder
+debug: False
+
+
+stream: RGB_SKEL
+
+feeder: feeders.feeder.Feeder
+train_feeder_args:
+  data_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/Skeleton_data/train_joint_1st_index_interpolated.npy #/media/22905553/F020DDF820DDC5AE/Olympic_v1/Olympic_Openpose/train_joint_tracked_interpolated.npy
+  label_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/Skeleton_data/train_label_1st_index.pkl #/media/22905553/F020DDF820DDC5AE/Olympic_v1/Olympic_Openpose/train_label_tracked.pkl  
+  video_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/X3D_extracted_video_features/train #/media/22905553/F020DDF820DDC5AE/Olympic_v1/video_frames/
+  seq_len: -1
+  video_feature: True
+  video_only: False
+  label_smooth: True
+  normalization: True
+  debug: False
+
+
+class_loss: False
+
+test_feeder_args:
+  data_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/Skeleton_data/test_joint_1st_index_interpolated.npy #/media/22905553/F020DDF820DDC5AE/Olympic_v1/Olympic_Openpose/test_joint_tracked_interpolated.npy
+  label_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/Skeleton_data/test_label_1st_index.pkl #/media/22905553/F020DDF820DDC5AE/Olympic_v1/Olympic_Openpose/test_label_tracked.pkl
+  video_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/X3D_extracted_video_features/test #/media/22905553/F020DDF820DDC5AE/Olympic_v1/video_frames/
+  seq_len: -1
+  video_feature: True
+  video_only: False
+  label_smooth: True
+  normalization: True
+  debug: False
+
+pretrain: False
+
+num_worker: 0  
+
+model1: model.model.Model
+model_args:
+  num_class: 2
+  num_point: 25 
+  max_frame: 3500
+  graph_args:
+    'layout': 'olympic'
+    'strategy': 'spatial'
+    'max_hop': 3
+  act_type: 'relu'
+  bias: True
+  edge: True
+  block_size: 41
+  class_loss: False
+
+model2: model.seq_model.MLP
+seq_model_args:
+  input_size: 5600
+  inchannel: 12
+  channel_kernel: 16
+  seq_kernel: 59
+  drop_out: 0.2
+  stream: 2s
+
+model3: model.vid_model.VideoModel
+vid_model_args:
+  channel_kernel: 16
+  seq_kernel: 64
+  hidden1: 512
+  hidden2: 128
+  stream: 2s
+  class_loss: False
+
+
+# optim
+optimizer: Adam  #SGD
+weight_decay: 0.0001
+base_lr: 0.01
+step: [10,20,30, 40]
+step_size: 20
+#warmup_epoch: 5
+cosine_schedule: False
+
+# training
+#alpha: 0.9
+#temperature: 10
+num_epoch: 50
+#temp: 0.07
+device: [0]
+batch_size: 8
+forward_batch_size: 4
+test_batch_size: 8
+nesterov: True
+
+weights1: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Olympic_code/trial29/weights/weights-27-594.pt
+#weights2: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Olympic_code/trial29/weights/seq-weights-27-594.pt
+weights3: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Olympic_code/trial24/weights/vid-weights-24-1056.pt
+
+
+
+#checkpoint: /home/uniwa/students3/students/22905553/linux/phd_codes/Action_recognition/Trial35/checkpoints/checkpoint-35-fwbz32-21525.pt
+
+

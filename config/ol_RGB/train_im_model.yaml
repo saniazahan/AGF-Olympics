@@ -1,0 +1,76 @@
+
+work_dir: ./work_dir/ntu/xsub/trial1
+
+# feeder
+debug: False
+
+pretrain: True
+
+stream: RGB
+
+feeder: feeders.feeder.Feeder
+train_feeder_args:
+  data_path: False #/media/22905553/F020DDF820DDC5AE/Olympic_v1/Olympic_Openpose/train_joint_tracked_interpolated.npy
+  label_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/Olympic_Openpose/train_label_tracked.pkl  
+  video_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/video_frames/
+  seq_len: -1
+  video_feature: False
+  video_only: True
+  modal: image
+  label_smooth: True
+  normalization: True
+  debug: False
+
+class_loss: False
+
+test_feeder_args:
+  data_path: False #/media/22905553/F020DDF820DDC5AE/Olympic_v1/Olympic_Openpose/test_joint_tracked_interpolated.npy
+  label_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/Olympic_Openpose/test_label_tracked.pkl
+  video_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/video_frames/
+  seq_len: -1
+  video_feature: False
+  video_only: True
+  modal: image
+  label_smooth: True
+  normalization: True
+  debug: False
+
+num_worker: 0  
+
+model3: model.im_model.SeqImModel
+vid_model_args:
+  seq_len: 112
+  hidden_size: 128
+  bidirectional: True
+  self_attention: True
+
+
+# optim
+optimizer: Adam  #SGD
+weight_decay: 0.0001
+base_lr: 0.01
+step: [10,20,30, 40]
+step_size: 20
+#warmup_epoch: 5
+cosine_schedule: False
+
+# training
+#alpha: 0.9
+#temperature: 10
+num_epoch: 30
+#temp: 0.07
+device: [0]
+batch_size: 2
+forward_batch_size: 2
+test_batch_size: 2
+nesterov: True
+
+#teacher_weights: /home/uniwa/students3/students/22905553/linux/phd_codes/action_recognition/pretrianed_model/msg3d/ntu60-xsub-joint-paper.pt
+#weights: /home/uniwa/students3/students/22905553/linux/phd_codes/Action_recognition/Trial30_2/weights/weights-150-92250.pt
+
+#weights: /home/uniwa/students3/students/22905553/linux/phd_codes/Action_recognition/Trial35/weights/weights-35-21525.pt
+
+
+#checkpoint: /home/uniwa/students3/students/22905553/linux/phd_codes/Action_recognition/Trial35/checkpoints/checkpoint-35-fwbz32-21525.pt
+
+

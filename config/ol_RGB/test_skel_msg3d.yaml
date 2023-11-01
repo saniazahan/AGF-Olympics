@@ -1,0 +1,57 @@
+# feeder
+feeder: feeders.feeder.Feeder
+
+stream: SKEL #RGB #2s
+
+#data_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/Skeleton_data/test_joint_1st_index_interpolated.npy
+#label_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/Skeleton_data/test_label_1st_index.pkl
+test_feeder_args:
+#data_path: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Data/Olympic_Openpose/Olympic_Openpose_V1/train_joint_v1.npy
+#label_path: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Data/Olympic_Openpose/Olympic_Openpose_V1/train_label_v1.pkl
+  data_path: /mnt/F020DDF820DDC5AE/AQA_Olympics/Olympic_v1/Olympic_Openpose/old_data/test_joint_interpolated.npy
+  label_path: /mnt/F020DDF820DDC5AE/AQA_Olympics/Olympic_v1/Olympic_Openpose/old_data/test_label_v1.pkl
+#  data_path: /mnt/F020DDF820DDC5AE/AQA_Olympics/Olympic_v1/Skeleton_data/test_joint_1st_index.npy
+#  label_path: /mnt/F020DDF820DDC5AE/AQA_Olympics/Olympic_v1/Skeleton_data/test_label_1st_index.pkl
+  video_path: None #/media/22905553/F020DDF820DDC5AE/Olympic_v1/video_frames/
+  seq_len: -1
+  video_feature: False
+  video_only: False
+  label_smooth: True
+  normalization: True
+  debug: False
+
+# model
+model1: model_msg3d.msg3d.Model
+model_args:
+  num_class: 1
+  num_point: 25
+  num_person: 1
+  num_gcn_scales: 13    # `num_scales` == `K + 1` in the paper
+  num_g3d_scales: 6
+  graph: graph.msg3d_olympic.AdjMatrixGraph
+#  drop_out: 0.2
+
+model2: model.seq_model.MLP
+seq_model_args:
+  NL_dimention: 2
+  NL_mode: embedded
+  channel_kernel: 16
+  drop_out: 0.2
+  hidden1: 192
+  hidden2: 96
+  inchannel: 192
+  input_size: 875
+  seq_kernel: 59
+  stream: 1s
+  class_loss: True
+
+
+# test
+phase: test
+device: [0]
+test_batch_size: 1
+weights1: ./trial51_2/weights/weights-9-801.pt
+weights2: ./trial51_2/weights/seq-weights-9-801.pt
+
+work_dir: ./eval/ntu/xsub/joint/
+save_score: True

@@ -1,0 +1,37 @@
+stream: RGB
+
+# feeder
+feeder: feeders.feeder.Feeder
+test_feeder_args:
+  data_path: False #/media/22905553/F020DDF820DDC5AE/Olympic_v1/Olympic_Openpose/test_joint_tracked_interpolated.npy
+  label_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/Olympic_Openpose/test_label_tracked.pkl
+  video_path: /media/22905553/F020DDF820DDC5AE/Olympic_v1/video_frames/
+  seq_len: 112
+  video_feature: False
+  video_only: True
+  modal: image
+  label_smooth: True
+  normalization: True
+  debug: False
+
+
+# model
+model3: model.im_model.SeqImModel
+vid_model_args:
+  seq_len: 112
+  hidden_size: 128
+  bidirectional: True
+  self_attention: True
+
+
+# test
+phase: test
+device: [0]
+test_batch_size: 8
+#weights1: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Olympic_code/trial21/weights/weights-4-176.pt
+
+#weights2: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Olympic_code/trial20/weights/seq-weights-4-176.pt
+weights3: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Olympic_code/trial27/weights/vid-weights-25-2200.pt #vid-weights-10-880.pt
+
+work_dir: ./eval/ntu/xsub/joint/
+save_score: True

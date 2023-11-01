@@ -1,0 +1,48 @@
+stream: RGB
+
+class_loss: False
+# feeder
+feeder: feeders.feeder.Feeder
+test_feeder_args:
+  data_path: False #/media/22905553/F020DDF820DDC5AE/Olympic_v1/Olympic_Openpose/test_joint_tracked_interpolated.npy
+  label_path: /mnt/F020DDF820DDC5AE/AQA_Olympics/Olympic_v1/Olympic_Openpose/old_data/test_label_v1.pkl
+  video_path: /mnt/F020DDF820DDC5AE/AQA_Olympics/Olympic_v1/X3D_extracted_video_features #/media/22905553/F020DDF820DDC5AE/Olympic_v1/video_frames/
+  seq_len: -1
+  video_feature: True
+  video_only: True
+  label_smooth: False
+  normalization: True
+  debug: False
+
+
+num_worker: 0  
+# model
+#model3: model.RGB_feature_encoder.SeqImModel
+#vid_model_args:
+#  seq_len: 112
+#  hidden_size: 128
+#  bidirectional: True
+pretrain: False
+
+model3: model.vid_model.VideoModel
+vid_model_args:
+  channel_kernel: 16
+  seq_kernel: 32
+  hidden1: 512
+  hidden2: 128
+  attention: None #stva #DNL
+  ddm: False
+  sdd: False
+  stream: 1s
+
+# test
+phase: test
+device: [0]
+test_batch_size: 1
+#weights1: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Olympic_code/trial21/weights/weights-4-176.pt
+
+#weights2: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Olympic_code/trial20/weights/seq-weights-4-176.pt
+weights3: ./trial45/weights/vid-weights-8-2848.pt
+
+work_dir: ./eval/ntu/xsub/joint/
+save_score: True

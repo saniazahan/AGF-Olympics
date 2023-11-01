@@ -1,0 +1,92 @@
+
+work_dir: ./work_dir/ntu/xsub/trial1
+
+# feeder
+debug: False
+
+stream: 2s
+
+feeder: feeders.feeder.Feeder
+train_feeder_args:
+  data_path: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Data/MSG3D_extracted_joint_features
+  label_path: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Data/Olympic_Openpose/Olympic_Openpose_V1/train_label_v1.pkl
+  video_path: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Data/X3D_extracted_video_features
+  seq_len: -1
+  joint_feature: True
+  video_feature: True
+  video_only: False
+  label_smooth: True
+  normalization: True
+  debug: False
+
+
+class_loss: False
+pretrain: False
+
+num_worker: 16
+
+test_feeder_args:
+  data_path: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Data/MSG3D_extracted_joint_features
+  label_path: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Data/Olympic_Openpose/Olympic_Openpose_V1/test_label_v1.pkl
+  video_path: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Data/X3D_extracted_video_features
+  seq_len: -1
+  joint_feature: True
+  video_feature: True
+  video_only: False
+  label_smooth: True
+  normalization: True
+  debug: False
+
+# model
+
+model2: model.seq_model.MLP
+seq_model_args:
+  input_size: 875
+  inchannel: 192
+  NL_mode: embedded #concatenate
+  NL_dimention: 1
+  channel_kernel: 16
+  seq_kernel: 59
+  drop_out: 0.2
+  hidden1: 192
+  hidden2: 96
+  stream: 2s
+
+model3: model.vid_model.VideoModel
+vid_model_args:
+  channel_kernel: 16
+  seq_kernel: 32
+  hidden1: 512
+  hidden2: 128
+  attention: None #stva
+  ddm: False
+  sdd: False
+  stream: 2s
+
+# optim
+optimizer: Adam  #SGD
+weight_decay: 0.0001
+base_lr: 0.01
+step: [10,20,30, 40]
+step_size: 20
+#warmup_epoch: 5
+cosine_schedule: False
+
+# training
+#alpha: 0.9
+#temperature: 10
+num_epoch: 50
+#temp: 0.07
+device: [0]
+batch_size: 4
+forward_batch_size: 2
+test_batch_size: 4
+nesterov: True
+save_score: True
+#teacher_weights: /home/uniwa/students3/students/22905553/linux/phd_codes/action_recognition/pretrianed_model/msg3d/ntu60-xsub-joint-paper.pt
+#weights1: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Olympic_code/trial50/weights/weights-25-2225.pt
+#weights2: /home/uniwa/students3/students/22905553/linux/phd_codes/Olympics/Olympic_code/trial30/weights/seq-weights-35-1540.pt
+
+#checkpoint: /home/uniwa/students3/students/22905553/linux/phd_codes/Action_recognition/Trial35/checkpoints/checkpoint-35-fwbz32-21525.pt
+
+
